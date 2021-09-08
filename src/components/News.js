@@ -30,25 +30,27 @@ export class News extends Component {
   }
   //Here we put the link of our API
   async updateNews() {
-    //this is  a funtion we can use in next and prev function
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=0cf03c8831e94969908e47f04d50b587&page=${this.state.page}&pageSize=${this.props.pageSize}`; //api url, i add page and page size later
+    this.props.setProgress(10);
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`; //api url, i add page and page size later
+    // this.setState({loading: true})
     let data = await fetch(url); //using fetch api
+    this.props.setProgress(50);
     let parsedData = await data.json(); //converting
-    this.setState({loading: true})
+    this.props.setProgress(70);
     this.setState({
       articles: parsedData.articles,
+       //assigning the value of article to parsed data
       totalResults: parsedData.totalResults,
       loading: false
-    }); //assigning the value of article to parsed data
-    console.log(parsedData);
+    });
+    this.props.setProgress(100);
   }
-  //Here we put the link of our API
   async componentDidMount() {
     this.updateNews();
   }
   fetchMoreData = async () => {//code taken from codesandbox.com
     this.setState({page: this.state.page+1})
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=0cf03c8831e94969908e47f04d50b587&page=${this.state.page}&pageSize=${this.props.pageSize}`; //api url, i add page and page size later
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`; //api url, i add page and page size later
     let data = await fetch(url); //using fetch api
     let parsedData = await data.json(); //converting
     this.setState({
